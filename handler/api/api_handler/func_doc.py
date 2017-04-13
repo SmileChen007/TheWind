@@ -1,11 +1,8 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 from data.db_doc import *
+from data.define import categories_local
 from handler.api import errors
-
-categories_local = ['xuanhuan', 'dushi', 'xianxia', 'lishi', 'wangyou', 'kehuan', 'kongbu', 'yanqing', 'wenxue',
-                    'other',
-                    'finish']
 
 
 def get_category(category, categories=None):

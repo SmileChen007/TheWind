@@ -42,27 +42,17 @@ def create_db():
     BookCategory().save(callback=handler_result)
 
 
-write_db_tasks = 14
+write_db_tasks = len(define.book_code) + len(define.book_category)
 now_write_task = 0
 
 
 @gen.coroutine
 def write_db():
     print('start write db data ...')
-    BookStatus(**define.book_code_0).save(callback=handler_write_db)
-    BookStatus(**define.book_code_1).save(callback=handler_write_db)
-    BookStatus(**define.book_code_2).save(callback=handler_write_db)
-    BookCategory(**define.book_category_0).save(callback=handler_write_db)
-    BookCategory(**define.book_category_1).save(callback=handler_write_db)
-    BookCategory(**define.book_category_2).save(callback=handler_write_db)
-    BookCategory(**define.book_category_3).save(callback=handler_write_db)
-    BookCategory(**define.book_category_4).save(callback=handler_write_db)
-    BookCategory(**define.book_category_5).save(callback=handler_write_db)
-    BookCategory(**define.book_category_6).save(callback=handler_write_db)
-    BookCategory(**define.book_category_7).save(callback=handler_write_db)
-    BookCategory(**define.book_category_8).save(callback=handler_write_db)
-    BookCategory(**define.book_category_9).save(callback=handler_write_db)
-    BookCategory(**define.book_category_10).save(callback=handler_write_db)
+    for book_code in define.book_code:
+        BookStatus(**book_code).save(callback=handler_write_db)
+    for category in define.book_category:
+        BookCategory(**category).save(callback=handler_write_db)
 
 
 @gen.coroutine

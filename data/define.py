@@ -1,18 +1,22 @@
 #!/usr/bin/env python
 # coding:utf-8
 
-book_code_0 = dict(book_code=0, book_status='连载', extra='')
-book_code_1 = dict(book_code=1, book_status='完结', extra='')
-book_code_2 = dict(book_code=2, book_status='冻结', extra='')
+book_code = [
+    dict(book_code=0, book_status='连载', extra=''),
+    dict(book_code=1, book_status='完结', extra=''),
+    dict(book_code=2, book_status='冻结', extra='')]
 
-book_category_0 = dict(novel_category='xuanhuan', category_include='xuanhuan')
-book_category_1 = dict(novel_category='dushi', category_include='dushi')
-book_category_2 = dict(novel_category='xianxia', category_include='xianxia')
-book_category_3 = dict(novel_category='lishi', category_include='lishi')
-book_category_4 = dict(novel_category='wangyou', category_include='wangyou')
-book_category_5 = dict(novel_category='kehuan', category_include='kehuan')
-book_category_6 = dict(novel_category='kongbu', category_include='kongbu')
-book_category_7 = dict(novel_category='yanqing', category_include='yanqing')
-book_category_8 = dict(novel_category='wenxue', category_include='wenxue')
-book_category_9 = dict(novel_category='other', category_include='other')
-book_category_10 = dict(novel_category='finish', category_include='finish')
+categories_local = ['xuanhuan', 'dushi', 'xianxia', 'lishi', 'wangyou', 'kehuan', 'kongbu', 'yanqing', 'wenxue',
+                    'other', 'finish']
+book_category = [
+    dict(novel_category=categories_local[0], category_include='xuanhuan'),
+    dict(novel_category=categories_local[1], category_include='dushi'),
+    dict(novel_category=categories_local[2], category_include='xianxia'),
+    dict(novel_category=categories_local[3], category_include='lishi'),
+    dict(novel_category=categories_local[4], category_include='wangyou'),
+    dict(novel_category=categories_local[5], category_include='kehuan'),
+    dict(novel_category=categories_local[6], category_include='kongbu'),
+    dict(novel_category=categories_local[7], category_include='yanqing'),
+    dict(novel_category=categories_local[8], category_include='wenxue'),
+    dict(novel_category=categories_local[9], category_include='other'),
+    dict(novel_category=categories_local[10], category_include='finish')]

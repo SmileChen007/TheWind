@@ -42,7 +42,7 @@ def create_db():
     BookCategory().save(callback=handler_result)
 
 
-write_db_tasks = 15
+write_db_tasks = 14
 now_write_task = 0
 
 
@@ -63,7 +63,6 @@ def write_db():
     BookCategory(**define.book_category_8).save(callback=handler_write_db)
     BookCategory(**define.book_category_9).save(callback=handler_write_db)
     BookCategory(**define.book_category_10).save(callback=handler_write_db)
-    BookCategory(**define.book_category_11).save(callback=handler_write_db)
 
 
 @gen.coroutine

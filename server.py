@@ -17,12 +17,13 @@ def main():
     parse_command_line()
 
     io_loop = tornado.ioloop.IOLoop.instance()
-    connect_db(io_loop, True)
+    connect_db(io_loop, False)
     app = Application()
 
     app.listen(options.port)
     print('Server is running at http://127.0.0.1:%s' % options.port)
     io_loop.start()
+
 
 if __name__ == "__main__":
     main()

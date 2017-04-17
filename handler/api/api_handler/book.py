@@ -87,11 +87,11 @@ class InsertNovel(BaseApiRequest):
                 info.novel_author = self.get_argument('novel_author', None)
                 info.novel_details = self.get_argument('novel_details', None)
                 info.novel_down_url = self.get_argument('novel_down_url', None)
-                info.novel_size = self.get_arguments('novel_size', '0.0')
-                info.novel_catalog_url = self.get_arguments('novel_catalog_url', None)
-                info.novel_origin = self.get_arguments('novel_origin', None)
-                info.novel_grade = self.get_arguments('novel_grade', 0)
-                info.novel_status_code = self.get_arguments('novel_status_code', None)
+                info.novel_size = self.get_argument('novel_size', '0.0')
+                info.novel_catalog_url = self.get_argument('novel_catalog_url', None)
+                info.novel_origin = self.get_argument('novel_origin', None)
+                info.novel_grade = self.get_argument('novel_grade', 0)
+                info.novel_status_code = self.get_argument('novel_status_code', None)
                 info.create_time = create_time()
                 info.novel_download_count = 0
 
@@ -115,9 +115,13 @@ class InsertNovel(BaseApiRequest):
                     error['reason'] = '请填写下载链接!'
                     self.write_error(**error)
                     return
-                yield info.save()
-                info = info.to_dict()
-                self.write_json(info)
+                try:
+                    yield info.save()
+                    info = info.to_dict()
+                    self.write_json(info)
+                except:
+                    self.write_error(**info)
+
             else:
                 self.write_error(**info)
         else:
@@ -136,11 +140,11 @@ class UpdateNovel(BaseApiRequest):
         novel_author = self.get_argument('novel_author', None)
         novel_details = self.get_argument('novel_details', None)
         novel_down_url = self.get_argument('novel_down_url', None)
-        novel_size = self.get_arguments('novel_size', None)
-        novel_catalog_url = self.get_arguments('novel_catalog_url', None)
-        novel_origin = self.get_arguments('novel_origin', None)
-        novel_grade = self.get_arguments('novel_grade', None)
-        novel_status_code = self.get_arguments('novel_status_code', None)
+        novel_size = self.get_argument('novel_size', None)
+        novel_catalog_url = self.get_argument('novel_catalog_url', None)
+        novel_origin = self.get_argument('novel_origin', None)
+        novel_grade = self.get_argument('novel_grade', None)
+        novel_status_code = self.get_argument('novel_status_code', None)
         error = errors.status_10001
         if _id is None:
             error['reason'] = 'id为空 !'

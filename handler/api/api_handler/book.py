@@ -194,22 +194,21 @@ class QueryBook(BaseApiRequest):
     @gen.coroutine
     def get(self):
         novel_category = self.get_argument('novel_category', 'all')
-        novel_name = self.get_argument('novel_name', None)
-        novel_author = self.get_argument('novel_author', None)
-        if novel_name is None and novel_author is None:
+        book_info = self.get_argument('book_info', None)
+        if book_info is None:
             self.write_error(**errors.status_10001)
         else:
-            if novel_category is 'all':
+            if novel_category == 'all':
                 self.write_error(**errors.status_4)
             else:
                 status, db_or_error = get_category(novel_category)
                 if status:
-                    query = Q(novel_name__icontains=novel_name) | Q(novel_author__icontains=novel_author)
+                    query = Q(novel_name__icontains=book_info) | Q(novel_author__icontains=book_info)
                     books = yield db_or_error.objects.filter(query).limit(5).find_all()
                     if len(books) != 0:
                         self.write_json([novel.to_dict() for novel in books])
                     else:
-                        self.write_error(**errors.status_10004)
+                        self.write_error(**errors.status_10009)
                 else:
                     self.write_error(**db_or_error)
 

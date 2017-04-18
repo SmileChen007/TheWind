@@ -4,10 +4,10 @@ import json
 
 import tornado.web
 from bson import ObjectId
+from motorengine import Q
 
-from tornado import gen
-from data.db_doc import *
 from handler.api import errors
+from tornado import gen
 from handler.api.BaseApiHandler import BaseApiRequest
 from util.time import create_time
 from func_doc import *
@@ -52,7 +52,7 @@ class GetAllUsers(BaseApiRequest):
             self.write_error(**errors.status_10003)
 
 
-class GetAllNovels(BaseApiRequest):
+class GetAllBooks(BaseApiRequest):
     @tornado.web.asynchronous
     @gen.coroutine
     def get(self):
@@ -73,7 +73,7 @@ class GetAllNovels(BaseApiRequest):
             self.write_error(**error)
 
 
-class InsertNovel(BaseApiRequest):
+class InsertBook(BaseApiRequest):
     @tornado.web.asynchronous
     @gen.coroutine
     def get(self):
@@ -129,7 +129,7 @@ class InsertNovel(BaseApiRequest):
             self.write_error(**error)
 
 
-class UpdateNovel(BaseApiRequest):
+class UpdateBook(BaseApiRequest):
     @tornado.web.asynchronous
     @gen.coroutine
     def get(self):
@@ -153,9 +153,7 @@ class UpdateNovel(BaseApiRequest):
         if novel_category is not None:
             status, info = get_category(novel_category)
             if status:
-
                 novel = yield info.objects.get(_id)
-                print (novel.to_dict())
                 if novel is not None:
                     novel.update_time = create_time()
                     if novel_author is not None:
@@ -189,6 +187,31 @@ class UpdateNovel(BaseApiRequest):
         else:
             error['reason'] = '请填写分类!'
             self.write_error(**error)
+
+
+class QueryBook(BaseApiRequest):
+    @tornado.web.asynchronous
+    @gen.coroutine
+    def get(self):
+        novel_category = self.get_argument('novel_category', 'all')
+        novel_name = self.get_argument('novel_name', None)
+        novel_author = self.get_argument('novel_author', None)
+        if novel_name is None and novel_author is None:
+            self.write_error(**errors.status_10001)
+        else:
+            if novel_category is 'all':
+                self.write_error(**errors.status_4)
+            else:
+                status, db_or_error = get_category(novel_category)
+                if status:
+                    query = Q(novel_name__icontains=novel_name) | Q(novel_author__icontains=novel_author)
+                    books = yield db_or_error.objects.filter(query).limit(5).find_all()
+                    if len(books) != 0:
+                        self.write_json([novel.to_dict() for novel in books])
+                    else:
+                        self.write_error(**errors.status_10004)
+                else:
+                    self.write_error(**db_or_error)
 
 
 class GetSmsCode(BaseApiRequest):

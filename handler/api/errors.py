@@ -20,4 +20,4 @@ status_10006 = dict(status_code=10006, reason='没有此分类!')
 status_10007 = dict(status_code=10007, reason='书籍名称为空!')
 status_10008 = dict(status_code=10008, reason='作者为空!')
 status_10009 = dict(status_code=10009, reason='书库没有收藏此书籍!')
-
+status_10010 = dict(status_code=10010, reason='unkonwn error !')

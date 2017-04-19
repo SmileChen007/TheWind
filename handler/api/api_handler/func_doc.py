@@ -5,6 +5,10 @@ from data.define import categories_local
 from handler.api import errors
 
 
+def get_categories_local():
+    return categories_local
+
+
 def get_category(category, categories=None):
     '''
     返回对应分类的实体

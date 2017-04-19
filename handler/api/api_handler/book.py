@@ -17,60 +17,69 @@ class RegisterHandler(BaseApiRequest):
     @tornado.web.asynchronous
     @gen.coroutine
     def get(self):
-        mobile = self.get_argument('mobile', None)
-        pwd = self.get_argument('pwd', None)
-        error = errors.status_10001
-        if mobile is None:
-            error['reason'] = 'mobile is null !'
-            self.write_error(**error)
-            return
-        if pwd is None:
-            error['reason'] = 'pwd is null !'
-            self.write_error(**error)
-            return
-        users = yield User.objects.filter(mobile=mobile).find_all()
-        if len(users) != 0:
-            # 手机号码已经被注册
-            self.write_error(**errors.status_21)
-            return
+        try:
+            mobile = self.get_argument('mobile', None)
+            pwd = self.get_argument('pwd', None)
+            error = errors.status_10001
+            if mobile is None:
+                error['reason'] = 'mobile is null !'
+                self.write_error(**error)
+                return
+            if pwd is None:
+                error['reason'] = 'pwd is null !'
+                self.write_error(**error)
+                return
+            users = yield User.objects.filter(mobile=mobile).find_all()
+            if len(users) != 0:
+                # 手机号码已经被注册
+                self.write_error(**errors.status_21)
+                return
 
-        user = User(mobile=mobile, password=pwd, nickname='test', create_time=create_time())
-        yield user.save()
+            user = User(mobile=mobile, password=pwd, nickname='test', create_time=create_time())
+            yield user.save()
 
-        user = user.to_dict()
-        self.write_json(user)
+            user = user.to_dict()
+            self.write_json(user)
+        except:
+            self.write_error(**errors.status_10010)
 
 
 class GetAllUsers(BaseApiRequest):
     @tornado.web.asynchronous
     @gen.coroutine
     def get(self):
-        users = yield User.objects.find_all()
-        if len(users) != 0:
-            self.write_json([usr.to_dict() for usr in users])
-        else:
-            self.write_error(**errors.status_10003)
+        try:
+            users = yield User.objects.find_all()
+            if len(users) != 0:
+                self.write_json([usr.to_dict() for usr in users])
+            else:
+                self.write_error(**errors.status_10003)
+        except:
+            self.write_error(**errors.status_10010)
 
 
 class GetAllBooks(BaseApiRequest):
     @tornado.web.asynchronous
     @gen.coroutine
     def get(self):
-        novel_category = self.get_argument('novel_category', None)
-        error = errors.status_10001
-        if novel_category is not None:
-            status, msg = get_category(novel_category)
-            if status:
-                novels = yield msg.objects.find_all()
-                if len(novels) != 0:
-                    self.write_json([novel.to_dict() for novel in novels])
+        try:
+            novel_category = self.get_argument('novel_category', None)
+            error = errors.status_10001
+            if novel_category is not None:
+                status, msg = get_category(novel_category)
+                if status:
+                    novels = yield msg.objects.find_all()
+                    if len(novels) != 0:
+                        self.write_json([novel.to_dict() for novel in novels])
+                    else:
+                        self.write_error(**errors.status_10004)
                 else:
-                    self.write_error(**errors.status_10004)
+                    self.write_error(**msg)
             else:
-                self.write_error(**msg)
-        else:
-            error['reason'] = '请填写分类!'
-            self.write_error(**error)
+                error['reason'] = '请填写分类!'
+                self.write_error(**error)
+        except:
+            self.write_error(**errors.status_10010)
 
 
 class InsertBook(BaseApiRequest):
@@ -133,84 +142,102 @@ class UpdateBook(BaseApiRequest):
     @tornado.web.asynchronous
     @gen.coroutine
     def get(self):
-        _id = ObjectId(self.get_argument('id', None))
-        novel_category = self.get_argument('novel_category', None)
-        novel_name = self.get_argument('novel_name', None)
-        novel_img_url = self.get_argument('novel_img_url', None)
-        novel_author = self.get_argument('novel_author', None)
-        novel_details = self.get_argument('novel_details', None)
-        novel_down_url = self.get_argument('novel_down_url', None)
-        novel_size = self.get_argument('novel_size', None)
-        novel_catalog_url = self.get_argument('novel_catalog_url', None)
-        novel_origin = self.get_argument('novel_origin', None)
-        novel_grade = self.get_argument('novel_grade', None)
-        novel_status_code = self.get_argument('novel_status_code', None)
-        error = errors.status_10001
-        if _id is None:
-            error['reason'] = 'id为空 !'
-            self.write_error(**error)
-            return
-        if novel_category is not None:
-            status, info = get_category(novel_category)
-            if status:
-                novel = yield info.objects.get(_id)
-                if novel is not None:
-                    novel.update_time = create_time()
-                    if novel_author is not None:
-                        novel.novel_author = novel_author
-                    if novel_name is not None:
-                        novel.novel_name = novel_name
-                    if novel_img_url is not None:
-                        novel.novel_img_url = novel_img_url
-                    if novel_category is not None:
-                        novel.novel_category = novel_category
-                    if novel_details is not None:
-                        novel.novel_details = novel_details
-                    if novel_down_url is not None:
-                        novel.novel_down_url = novel_down_url
-                    if novel_size is not None:
-                        novel.novel_size = novel_size
-                    if novel_catalog_url is not None:
-                        novel.novel_catalog_url = novel_catalog_url
-                    if novel_origin is not None:
-                        novel.novel_origin = novel_origin
-                    if novel_grade is not None:
-                        novel.novel_grade = novel_grade
-                    if novel_status_code is not None:
-                        novel.novel_status_code = novel_status_code
-                    yield novel.save()
-                    self.write_json(novel.to_dict())
+        try:
+            _id = ObjectId(self.get_argument('id', None))
+            novel_category = self.get_argument('novel_category', None)
+            novel_name = self.get_argument('novel_name', None)
+            novel_img_url = self.get_argument('novel_img_url', None)
+            novel_author = self.get_argument('novel_author', None)
+            novel_details = self.get_argument('novel_details', None)
+            novel_down_url = self.get_argument('novel_down_url', None)
+            novel_size = self.get_argument('novel_size', None)
+            novel_catalog_url = self.get_argument('novel_catalog_url', None)
+            novel_origin = self.get_argument('novel_origin', None)
+            novel_grade = self.get_argument('novel_grade', None)
+            novel_status_code = self.get_argument('novel_status_code', None)
+            error = errors.status_10001
+            if _id is None:
+                error['reason'] = 'id为空 !'
+                self.write_error(**error)
+                return
+            if novel_category is not None:
+                status, info = get_category(novel_category)
+                if status:
+                    novel = yield info.objects.get(_id)
+                    if novel is not None:
+                        novel.update_time = create_time()
+                        if novel_author is not None:
+                            novel.novel_author = novel_author
+                        if novel_name is not None:
+                            novel.novel_name = novel_name
+                        if novel_img_url is not None:
+                            novel.novel_img_url = novel_img_url
+                        if novel_category is not None:
+                            novel.novel_category = novel_category
+                        if novel_details is not None:
+                            novel.novel_details = novel_details
+                        if novel_down_url is not None:
+                            novel.novel_down_url = novel_down_url
+                        if novel_size is not None:
+                            novel.novel_size = novel_size
+                        if novel_catalog_url is not None:
+                            novel.novel_catalog_url = novel_catalog_url
+                        if novel_origin is not None:
+                            novel.novel_origin = novel_origin
+                        if novel_grade is not None:
+                            novel.novel_grade = novel_grade
+                        if novel_status_code is not None:
+                            novel.novel_status_code = novel_status_code
+                        yield novel.save()
+                        self.write_json(novel.to_dict())
+                    else:
+                        self.write_error(**errors.status_10002)
                 else:
-                    self.write_error(**errors.status_10002)
+                    self.write_error(**info)
             else:
-                self.write_error(**info)
-        else:
-            error['reason'] = '请填写分类!'
-            self.write_error(**error)
+                error['reason'] = '请填写分类!'
+                self.write_error(**error)
+        except:
+            self.write_error(**errors.status_10010)
 
 
 class QueryBook(BaseApiRequest):
     @tornado.web.asynchronous
     @gen.coroutine
     def get(self):
-        novel_category = self.get_argument('novel_category', 'all')
-        book_info = self.get_argument('book_info', None)
-        if book_info is None:
-            self.write_error(**errors.status_10001)
-        else:
-            if novel_category == 'all':
-                self.write_error(**errors.status_4)
+        try:
+            novel_category = self.get_argument('novel_category', 'all')
+            book_info = self.get_argument('book_info', None)
+            limit_size = self.get_argument('limit_size', 5)
+            if book_info is None:
+                self.write_error(**errors.status_10001)
             else:
-                status, db_or_error = get_category(novel_category)
-                if status:
-                    query = Q(novel_name__icontains=book_info) | Q(novel_author__icontains=book_info)
-                    books = yield db_or_error.objects.filter(query).limit(5).find_all()
+                query = Q(novel_name__icontains=book_info) | Q(novel_author__icontains=book_info)
+                if novel_category == 'all':
+                    books = []
+                    for book_type in get_categories_local():
+                        status, db_or_error = get_category(book_type)
+                        if status:
+                            books_add = yield db_or_error.objects.filter(query).limit(limit_size).find_all()
+                            if len(books_add) != 0:
+                                books.extend(books_add)
                     if len(books) != 0:
                         self.write_json([novel.to_dict() for novel in books])
                     else:
                         self.write_error(**errors.status_10009)
                 else:
-                    self.write_error(**db_or_error)
+                    status, db_or_error = get_category(novel_category)
+                    if status:
+                        books = yield db_or_error.objects.filter(query).limit(limit_size).find_all()
+                        print (books)
+                        if len(books) != 0:
+                            self.write_json([novel.to_dict() for novel in books])
+                        else:
+                            self.write_error(**errors.status_10009)
+                    else:
+                        self.write_error(**db_or_error)
+        except:
+            self.write_error(**errors.status_10010)
 
 
 class GetSmsCode(BaseApiRequest):

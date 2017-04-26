@@ -5,7 +5,7 @@ import os
 PROJECT_PATH = os.path.dirname(os.path.abspath(__file__))
 
 # MongoDB Config
-DB_HOST = 'www.coreice.org'
+DB_HOST = 'localhost'
 DB_PORT = 27017
 DB_NAME = 'wind'
 DB_USER = ''

@@ -34,9 +34,9 @@ def url_wrapper(urls):
 
 
 urls = url_wrapper([
-    # (r'/', MainHandler),
-    # (r'/index', MainHandler),
-    # (r'/home', MainHandler),
+    (r'/', MainHandler),
+    (r'/index', MainHandler),
+    (r'/home', MainHandler),
     (r'/api', include(api_urls)),
-    # (r'.*', HttpErrorHandler),
+    (r'.*', HttpErrorHandler),
 ])

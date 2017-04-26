@@ -1,0 +1,143 @@
+body {
+  overflow-x: hidden;
+  font-family: arial, serif;
+}
+
+#app {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  margin-top: 120px;
+}
+
+.s_ipt {
+  width: 526px;
+  border: 1px solid #b8b8b8;
+  height: 20px;
+  font-size: 16px;
+  line-height: 20px;
+  padding: 10px 9px 10px 7px;
+  margin-right: -5px;
+  -moz-box-shadow: none; /* For Firefox3.6+ */
+  -webkit-box-shadow: none; /* For Chrome5+, Safari5+ */
+  box-shadow: none; /* For Latest Opera */
+}
+
+.s_ipt:focus {
+  border: 1px solid #38f;
+  outline: none;
+}
+
+.query_book_btn {
+  background: #3385ff;
+  border: 0 none;
+  font-size: 15px;
+  height: 42px;
+  line-height: 40px;
+  padding: 0;
+  width: 100px;
+  margin: 0;
+  color: #ffffff;
+  border-radius: 0;
+  letter-spacing: 1px;
+  -webkit-appearance: none;
+  -webkit-border-radius: 0;
+}
+
+.query_book_btn:hover {
+  box-shadow: 1px 1px 1px #ccc;
+  -moz-box-shadow: 1px 1px 1px #ccc;
+  -o-box-shadow: 1px 1px 1px #ccc;
+  -webkit-box-shadow: 1px 1px 1px #ccc;
+}
+
+#books {
+  text-align: center;
+  list-style-type: none;
+  -moz-padding-start: 0;
+  -webkit-padding-start: 0;
+}
+
+#footer {
+  height: auto;
+  bottom: 5px;
+  text-align: center;
+  width: 100%;
+  font-size: 12px;
+  color: #999;
+  margin-top: 10px;
+  position: relative;
+  overflow: hidden;
+}
+
+#item {
+  text-align: center;
+  width: 620px;
+  margin: 0 auto;
+  margin-top: 10px;
+}
+
+#left {
+  text-align: left;
+  float: left;
+}
+
+#right {
+  float: right;
+  margin-top: 5px;
+}
+
+#bottom {
+  overflow: hidden;
+  margin-top: 5px;
+}
+
+#book_author {
+  font-weight: bolder;
+  font-size: 20px;
+}
+
+#books_list {
+  text-align: center;
+  margin: 0 auto;
+  -moz-padding-start: 0;
+  -webkit-padding-start: 0;
+}
+
+#book_name {
+  font-weight: bolder;
+  font-size: 20px;
+}
+
+#book_details {
+  font-weight: bolder;
+  font-size: 20px;
+}
+
+.download {
+  font-family: Arial, serif;
+  color: #ffffff;
+  font-size: 15px;
+  width: 80px;
+  height: 23px;
+  padding-top: 7px;
+  text-decoration: none;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  -webkit-box-shadow: 0 1px 3px #3388ff;
+  -moz-box-shadow: 0 1px 3px #3388ff;
+  box-shadow: 0 1px 3px #3388ff;
+  border: solid #3388ff 0;
+  background: -webkit-gradient(linear, 0 0, 0 100%, from(#3388ff), to(#3388ff));
+  background: -moz-linear-gradient(top, #3388ff, #3388ff);
+  -ms-filter: progid:DXImageTransform.Microsoft.gradient(startColorStr=#3388ff, endColorStr=#3388ff);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorStr=#3388ff, endColorStr=#3388ff);
+  display: inline-block; /* IE is so silly */
+}
+
+.download:hover {
+  background: -webkit-gradient(linear, 0 0, 0 100%, from(#3388ff), to(#3388ff));
+  background: -moz-linear-gradient(top, #3388ff, #3388ff);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#3388ff, endColorstr=#3388ff);
+}

@@ -2,7 +2,6 @@
 # coding:utf-8
 
 from motorengine import connect
-from motorengine.database import Database
 
 import config
 from data.db_util import init_db

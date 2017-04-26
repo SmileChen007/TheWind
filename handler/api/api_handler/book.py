@@ -222,6 +222,11 @@ class QueryBook(BaseApiRequest):
                             if len(books_add) != 0:
                                 books.extend(books_add)
                     if len(books) != 0:
+                        for book in books:
+                            if 'ice' in book.novel_down_url and book.novel_category not in book.novel_down_url:
+                                at = book.novel_down_url.rfind('/')
+                                book.novel_down_url = book.novel_down_url[
+                                                      :at] + '/' + book.novel_category + book.novel_down_url[at:]
                         self.write_json([novel.to_dict() for novel in books])
                     else:
                         self.write_error(**errors.status_10009)

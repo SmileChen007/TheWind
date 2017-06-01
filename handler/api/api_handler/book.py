@@ -38,7 +38,7 @@ class RegisterHandler(BaseApiRequest):
             yield user.save()
             user = user.to_dict()
             self.write_json(user)
-        except Exception:
+        except:
             self.write_error(**errors.status_10010)
 
 

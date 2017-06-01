@@ -18,29 +18,27 @@ class RegisterHandler(BaseApiRequest):
     @gen.coroutine
     def get(self):
         try:
-            mobile = self.get_argument('mobile', None)
-            pwd = self.get_argument('pwd', None)
-            error = errors.status_10001
-            if mobile is None:
-                error['reason'] = 'mobile is null !'
-                self.write_error(**error)
+            data = self.get_argument("data", None)
+            data = json.loads(data)
+            email = data['email']
+            pwd = data['pwd']
+            print (email + "--" + pwd)
+            if email is None:
+                self.write_error(**errors.status_10011)
                 return
             if pwd is None:
-                error['reason'] = 'pwd is null !'
-                self.write_error(**error)
+                self.write_error(**errors.status_10011)
                 return
-            users = yield User.objects.filter(mobile=mobile).find_all()
+            users = yield User.objects.filter(email=email).find_all()
             if len(users) != 0:
                 # 手机号码已经被注册
                 self.write_error(**errors.status_21)
                 return
-
-            user = User(mobile=mobile, password=pwd, nickname='test', create_time=create_time())
+            user = User(email=email, password=pwd, nickname='未设置昵称', create_time=create_time())
             yield user.save()
-
             user = user.to_dict()
             self.write_json(user)
-        except:
+        except Exception:
             self.write_error(**errors.status_10010)
 
 

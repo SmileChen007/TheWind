@@ -22,17 +22,16 @@ class RegisterHandler(BaseApiRequest):
             data = json.loads(data)
             email = data['email']
             pwd = data['pwd']
-            print (email + "--" + pwd)
             if email is None:
                 self.write_error(**errors.status_10011)
                 return
             if pwd is None:
-                self.write_error(**errors.status_10011)
+                self.write_error(**errors.status_10012)
                 return
             users = yield User.objects.filter(email=email).find_all()
             if len(users) != 0:
                 # 手机号码已经被注册
-                self.write_error(**errors.status_21)
+                self.write_error(**errors.status_10013)
                 return
             user = User(email=email, password=pwd, nickname='未设置昵称', create_time=create_time())
             yield user.save()

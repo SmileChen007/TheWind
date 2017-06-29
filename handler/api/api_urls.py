@@ -3,6 +3,7 @@ from handler.api.api_handler.book import *
 
 api_urls = [
     (r'/register', RegisterHandler),
+    (r'/login', LoginHandler),
     (r'/get_all_users', GetAllUsers),
     (r'/insert_book', InsertBook),
     (r'/get_books', GetAllBooks),

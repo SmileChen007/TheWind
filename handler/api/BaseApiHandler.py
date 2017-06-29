@@ -62,12 +62,14 @@ class BaseApiRequest(BaseRequest):
         else:
             self.write_json(None, status_code, kwargs['reason'])
 
-    def write_json(self, data, status_code=200, msg='success'):
-        self.finish(dumps({
+    def write_json(self, data, status_code=200, msg="success"):
+
+        result = {
             'code': status_code,
             'msg': msg,
             'data': data
-        }))
+        }
+        self.finish(dumps(result))
 
     def is_logined(self):
         if 'Token' in self.request.headers:

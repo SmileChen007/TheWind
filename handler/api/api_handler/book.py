@@ -36,7 +36,37 @@ class RegisterHandler(BaseApiRequest):
             user = User(email=email, password=pwd, nickname='未设置昵称', create_time=create_time())
             yield user.save()
             user = user.to_dict()
-            self.write_json(user)
+            print ("注册成功")
+            self.write_json(json.dumps(user))
+        except:
+            self.write_error(**errors.status_10010)
+
+
+class LoginHandler(BaseApiRequest):
+    @tornado.web.asynchronous
+    @gen.coroutine
+    def get(self):
+        try:
+            data = self.get_argument("data", None)
+            data = json.loads(data)
+            email = data['email']
+            pwd = data['pwd']
+            if email is None:
+                self.write_error(**errors.status_10011)
+                return
+            if pwd is None:
+                self.write_error(**errors.status_10012)
+                return
+            users = yield User.objects.filter(email=email).find_all()
+            if len(users) == 0:
+                # 手机号码未被注册
+                self.write_error(**errors.status_10014)
+            else:
+                user = users[0]
+                if user.password == pwd :
+                    self.write_json(json.dumps(user.to_dict()))
+                else:
+                    self.write_error(**errors.status_23)
         except:
             self.write_error(**errors.status_10010)
 

@@ -15,7 +15,7 @@ class Application(tornado.web.Application):
         settings = dict(
             template_path=TEMPLATE_PATH,
             static_path=STATIC_PATH,
-            debug=True,
+            debug=False,
             allow_remote_access=True,
         )
         tornado.web.Application.__init__(self, handlers, **settings)

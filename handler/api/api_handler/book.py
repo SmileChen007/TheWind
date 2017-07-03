@@ -72,6 +72,33 @@ class LoginHandler(BaseApiRequest):
             self.write_error(**errors.status_10010)
 
 
+class ExtraHandler(BaseApiRequest):
+    @tornado.web.asynchronous
+    @gen.coroutine
+    def get(self):
+        try:
+            data = self.get_argument("data", None)
+            data = json.loads(data)
+            email = data['email']
+            push_id = data['push_id']
+            if email is None:
+                self.write_error(**errors.status_10011)
+                return
+            if push_id is None:
+                self.write_error(**errors.status_10012)
+                return
+            users = yield User.objects.filter(email=email).find_all()
+            if len(users) == 0:
+                # 手机号码未被注册
+                self.write_error(**errors.status_10014)
+            else:
+                user = users[0]
+                user.push_id = push_id
+                yield user.save()
+        except:
+            self.write_error(**errors.status_10010)
+
+
 class GetAllUsers(BaseApiRequest):
     @tornado.web.asynchronous
     @gen.coroutine

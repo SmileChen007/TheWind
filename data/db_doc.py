@@ -60,6 +60,7 @@ class User(BaseDocument):
     up_book_amount = IntField()
     token = StringField()
     address = StringField()
+    push_id = StringField()
     books = ListField(StringField())
 
 

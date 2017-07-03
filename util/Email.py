@@ -6,8 +6,8 @@ from email.utils import formataddr
 
 # 第三方 SMTP 服务  使用阿里云邮箱
 mail_host = "smtp.mxhichina.com"  # 设置服务器
-mail_user = "ice@coreice.org"  # 用户名
-mail_pass = "Cl0907059379"  # 口令
+mail_user = ""  # 用户名
+mail_pass = ""  # 口令
 
 
 def body_txt():

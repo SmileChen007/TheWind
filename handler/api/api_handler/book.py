@@ -9,7 +9,7 @@ from motorengine import Q
 from handler.api import errors
 from tornado import gen
 from handler.api.BaseApiHandler import BaseApiRequest
-from util import Email
+from util.Email import new_user_body, send
 from util.time import create_time
 from func_doc import *
 
@@ -37,10 +37,9 @@ class RegisterHandler(BaseApiRequest):
             user = User(email=email, password=pwd, nickname='未设置昵称', create_time=create_time())
             yield user.save()
             user = user.to_dict()
-            print ("注册成功")
-            Email.send(Email.new_user_body(email),subject="注册成功", msg_type='html', receiver="1130212665@qq.com", mail_to='新用户')
             self.write_json(json.dumps(user))
-        except:
+            send(new_user_body(str(email)), subject="注册成功", msg_type='html', receiver=str(email), mail_to='新用户')
+        except Exception as e:
             self.write_error(**errors.status_10010)
 
 
@@ -65,7 +64,7 @@ class LoginHandler(BaseApiRequest):
                 self.write_error(**errors.status_10014)
             else:
                 user = users[0]
-                if user.password == pwd :
+                if user.password == pwd:
                     self.write_json(json.dumps(user.to_dict()))
                 else:
                     self.write_error(**errors.status_23)

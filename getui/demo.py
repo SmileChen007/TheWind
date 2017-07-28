@@ -253,9 +253,9 @@ def NotificationTemplateDemo():
     template.appKey = APPKEY
     template.transmissionType = 1
     template.transmissionContent = u"请填入透传内容"
-    template.title = u"请填入通知标题"
-    template.text = u"请填入通知内容"
-    template.logo = "icon.png"
+    template.title = u"测试"
+    template.text = u"测试通知"
+    template.logo = "ic_launcher.png"
     template.logoURL = ""
     template.isRing = True
     template.isVibrate = True

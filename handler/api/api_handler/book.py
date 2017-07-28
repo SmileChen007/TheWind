@@ -6,7 +6,6 @@ import tornado.web
 from bson import ObjectId
 from motorengine import Q
 
-from handler.api import errors
 from tornado import gen
 from handler.api.BaseApiHandler import BaseApiRequest
 from util.Email import new_user_body, send
@@ -314,4 +313,13 @@ class GetSmsCode(BaseApiRequest):
             'key': '4497a16d43b576a902d4f8211fb1651f808b4a87MMbLurJwhLiLqDKl9PbjuB0uX',
         })
         print (result.text)
+        pass
+
+
+class RecommendBookHandler(BaseApiRequest):
+    @tornado.web.asynchronous
+    @gen.coroutine
+    def get(self):
+        page = self.get_argument('book_page', 1)
+
         pass

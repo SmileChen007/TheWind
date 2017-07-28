@@ -117,3 +117,8 @@ class BookOther(Book):
 class BookFinish(Book):
     # 完本
     novel_category = StringField(default="wanjie")
+
+
+class Recommend(Book):
+    # 推荐
+    novel_category = StringField(default="recommend")

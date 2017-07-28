@@ -11,4 +11,5 @@ api_urls = [
     (r'/update_book', UpdateBook),
     (r'/get_sms_code', GetSmsCode),
     (r'/query_book', QueryBook),
+    (r'/recommend_books',RecommendBookHandler)
 ]

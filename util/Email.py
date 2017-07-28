@@ -6,8 +6,8 @@ from email.utils import formataddr
 
 # 第三方 SMTP 服务  使用阿里云邮箱
 mail_host = "smtp.mxhichina.com"  # 设置服务器
-mail_user = ""  # 用户名
-mail_pass = ""  # 口令
+mail_user = "ice@coreice.org"  # 用户名
+mail_pass = "Cl0907059379"  # 口令
 
 
 def body_txt():
@@ -48,10 +48,12 @@ def send(mail_msg, subject, receiver, msg_type='plain', mail_from="Wind", mail_t
         server.sendmail(mail_user, receiver, msg.as_string())  # 括号中对应的是发件人邮箱账号、收件人邮箱账号、发送邮件
         server.quit()  # 关闭连接
         print("邮件发送成功")
-    except Exception:  # 如果 try 中的语句没有执行，则会执行下面的 ret=False
+    except Exception as e:  # 如果 try 中的语句没有执行，则会执行下面的 ret=False
+        print (e)
         ret = False
         print("邮件发送失败")
     return ret
+
 
 # 测试
 # send(new_user_body('1130212665@qq.com'), subject="注册成功", msg_type='html', receiver="1130212665@qq.com", mail_to='新用户')

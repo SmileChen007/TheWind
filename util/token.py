@@ -1,9 +1,8 @@
 # coding:utf-8
 
 import time
-
-import config
-#from data.redis import redis
+from config import CONFIG
+from data.init_redis import Redis as redis
 from util.crypt import AESCrypto
 
 
@@ -15,7 +14,7 @@ class TokenManager:
     def create_token(self, uid):
         rt = int(time.time())
         token = self.crypto.encrypt('%d@%s' % (rt, uid))
-        #redis.set('token:' + uid, token)
+        # redis.set('token:' + uid, token)
         return token
 
     def validate_token(self, token):
@@ -49,4 +48,5 @@ class TokenManager:
         redis.delete('token:' + uid)
 
 
+config = CONFIG
 token_manager = TokenManager(config.AES_KEY, config.TOKEN_TIMEOUT)

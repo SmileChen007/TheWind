@@ -10,7 +10,7 @@ webpackJsonp([1], {
         "use strict";
         Object.defineProperty(t, "__esModule", {value: !0});
         var n = e(2), u = e(12), a = e.n(u), o = e(11), c = e(10), r = e.n(c);
-        r.a.defaults.baseURL = "http://www.coreice.org/", r.a.defaults.timeout = 7e3, n.a.prototype.$http = r.a, n.a.config.productionTip = !1, new n.a({
+        r.a.defaults.baseURL = "http://127.0.0.1:8888/", r.a.defaults.timeout = 7e3, n.a.prototype.$http = r.a, n.a.config.productionTip = !1, new n.a({
             el: "#app",
             router: o.a,
             template: "<App/>",

@@ -258,7 +258,7 @@ class UpdateBook(BaseApiRequest):
 class QueryBook(BaseApiRequest):
     @tornado.web.asynchronous
     @gen.coroutine
-    def get(self):
+    def get(self, *args, **kwargs):
         try:
             novel_category = self.get_argument('novel_category', 'all')
             book_info = self.get_argument('book_info', None)

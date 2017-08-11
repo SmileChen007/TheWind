@@ -8,6 +8,7 @@ from bson import ObjectId
 from tornado.web import HTTPError, RequestHandler
 
 from common.BaseHandler import BaseRequest
+from config import CONFIG
 from handler.api import errors
 from util.crypt import md5_data
 from util.token import token_manager
@@ -33,6 +34,7 @@ class BaseApiRequest(BaseRequest):
         self.set_header('Access-Control-Allow-Origin', '*')
 
     def get(self, *args, **kwargs):
+        print ('---------->>>>  get')
         raise HTTPError(**errors.status_0)
 
     def post(self, *args, **kwargs):
@@ -70,6 +72,9 @@ class BaseApiRequest(BaseRequest):
             'data': data
         }
         self.finish(dumps(result))
+
+    def is_running(self):
+        return CONFIG.WEBSITE['IS_RUNNING']
 
     def is_logined(self):
         if 'Token' in self.request.headers:

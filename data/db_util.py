@@ -40,6 +40,8 @@ def create_db():
     BookStatus().save(callback=handler_result)
     print('create db_category')
     BookCategory().save(callback=handler_result)
+    print('create db_recommend')
+    Recommend().save(callback=handler_result)
 
 
 write_db_tasks = len(define.book_code) + len(define.book_category)

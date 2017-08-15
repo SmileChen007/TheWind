@@ -14,6 +14,7 @@ def init_redis():
                 host=CONFIG.REDIS_DICT['REDIS_ENDPOINT'],
                 port=CONFIG.REDIS_DICT['REDIS_PORT'],
                 db=CONFIG.REDIS_DICT['SESSION_DB'],
+                password=CONFIG.REDIS_DICT['PASSWORD'],
             )
         )
         logging.info('----------------->>>  init redis success ！')

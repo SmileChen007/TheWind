@@ -5,12 +5,13 @@ import json
 import tornado.web
 from bson import ObjectId
 from motorengine import Q
-
+from config import LOGGER
+from data.init_redis import Redis
 from tornado import gen
 from handler.api.BaseApiHandler import BaseApiRequest
 from util.Email import new_user_body, send
 from util.time import create_time
-from func_doc import *
+from .func_doc import *
 
 
 class RegisterHandler(BaseApiRequest):
@@ -28,6 +29,11 @@ class RegisterHandler(BaseApiRequest):
             if pwd is None:
                 self.write_error(**errors.status_10012)
                 return
+            redis_email = Redis.exists('user:' + email)
+            print (redis_email)
+            if redis_email == 0:
+                self.write_error(**errors.status_10013)
+                return
             users = yield User.objects.filter(email=email).find_all()
             if len(users) != 0:
                 # 手机号码已经被注册
@@ -35,11 +41,13 @@ class RegisterHandler(BaseApiRequest):
                 return
             user = User(email=email, password=pwd, nickname='未设置昵称', create_time=create_time())
             yield user.save()
+            Redis.set('user:' + email, pwd)
             user = user.to_dict()
             self.write_json(json.dumps(user))
             send(new_user_body(str(email)), subject="注册成功", msg_type='html', receiver=str(email), mail_to='新用户')
         except Exception as e:
             self.write_error(**errors.status_10010)
+            LOGGER.error(e.message)
 
 
 class LoginHandler(BaseApiRequest):
@@ -57,6 +65,10 @@ class LoginHandler(BaseApiRequest):
             if pwd is None:
                 self.write_error(**errors.status_10012)
                 return
+            redis_email = Redis.exists('user:' + email)
+            if redis_email == 0:
+                self.write_error(**errors.status_10014)
+                return
             users = yield User.objects.filter(email=email).find_all()
             if len(users) == 0:
                 # 手机号码未被注册
@@ -67,8 +79,9 @@ class LoginHandler(BaseApiRequest):
                     self.write_json(json.dumps(user.to_dict()))
                 else:
                     self.write_error(**errors.status_23)
-        except:
+        except Exception as e:
             self.write_error(**errors.status_10010)
+            LOGGER.error(e.message)
 
 
 class ExtraHandler(BaseApiRequest):
@@ -94,8 +107,9 @@ class ExtraHandler(BaseApiRequest):
                 user = users[0]
                 user.push_id = push_id
                 yield user.save()
-        except:
+        except Exception as e:
             self.write_error(**errors.status_10010)
+            LOGGER.error(e.message)
 
 
 class GetAllUsers(BaseApiRequest):
@@ -108,8 +122,9 @@ class GetAllUsers(BaseApiRequest):
                 self.write_json([usr.to_dict() for usr in users])
             else:
                 self.write_error(**errors.status_10003)
-        except:
+        except Exception as e:
             self.write_error(**errors.status_10010)
+            LOGGER.error(e.message)
 
 
 class GetAllBooks(BaseApiRequest):
@@ -132,8 +147,9 @@ class GetAllBooks(BaseApiRequest):
             else:
                 error['reason'] = '请填写分类!'
                 self.write_error(**error)
-        except:
+        except Exception as e:
             self.write_error(**errors.status_10010)
+            LOGGER.error(e.message)
 
 
 class InsertBook(BaseApiRequest):
@@ -251,14 +267,15 @@ class UpdateBook(BaseApiRequest):
             else:
                 error['reason'] = '请填写分类!'
                 self.write_error(**error)
-        except:
+        except Exception as e:
             self.write_error(**errors.status_10010)
+            LOGGER.error(e.message)
 
 
 class QueryBook(BaseApiRequest):
     @tornado.web.asynchronous
     @gen.coroutine
-    def get(self, *args, **kwargs):
+    def get(self):
         try:
             novel_category = self.get_argument('novel_category', 'all')
             book_info = self.get_argument('book_info', None)
@@ -288,15 +305,16 @@ class QueryBook(BaseApiRequest):
                     status, db_or_error = get_category(novel_category)
                     if status:
                         books = yield db_or_error.objects.filter(query).limit(limit_size).find_all()
-                        print (books)
+                        print(books)
                         if len(books) != 0:
                             self.write_json([novel.to_dict() for novel in books])
                         else:
                             self.write_error(**errors.status_10009)
                     else:
                         self.write_error(**db_or_error)
-        except:
+        except Exception as e:
             self.write_error(**errors.status_10010)
+            LOGGER.error(e.message)
 
 
 class GetSmsCode(BaseApiRequest):
@@ -312,7 +330,7 @@ class GetSmsCode(BaseApiRequest):
             'message': 'Hello world',
             'key': '4497a16d43b576a902d4f8211fb1651f808b4a87MMbLurJwhLiLqDKl9PbjuB0uX',
         })
-        print (result.text)
+        print(result.text)
         pass
 
 
@@ -320,6 +338,13 @@ class RecommendBookHandler(BaseApiRequest):
     @tornado.web.asynchronous
     @gen.coroutine
     def get(self):
-        page = self.get_argument('book_page', 1)
-
-        pass
+        try:
+            page = self.get_argument('book_page', 1)
+            recommend_books = yield Recommend.objects.skip(10 * (page - 1)).limit(10).find_all()
+            if len(recommend_books) != 0:
+                self.write_json([novel.to_dict() for novel in recommend_books])
+            else:
+                self.write_error(**errors.status_10015)
+        except Exception as e:
+            self.write_error(**errors.status_10010)
+            LOGGER.error(e.message)

@@ -12,3 +12,4 @@ class MainHandler(BaseRequest):
     def get(self):
         all_the_data = open('dist/index.html', 'rb').read()
         self.write(all_the_data)
+        self.finish()
